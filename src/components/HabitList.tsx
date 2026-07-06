@@ -1,18 +1,14 @@
+import { useHabits, type Habit } from "../context/useHabits"
+import { format, isFuture, isSameDay, subDays } from "date-fns"
 import { Button } from "./Button"
-import { format, isFuture, isSameDay, subDays, eachDayOfInterval, startOfWeek, endOfWeek } from "date-fns"
 
-export type Habit = { id: string, name: string, completions: Date[] }
 type HabitListProps = {
-    habits: Habit[],
-    deleteHabit: (id: string) => void,
-    toggleHabit: (id: string, date: Date) => void
+    visibleDates: Date[]
 }
 
-export function HabitList({
-    habits,
-    deleteHabit,
-    toggleHabit
-}: HabitListProps) {
+export function HabitList({ visibleDates }: HabitListProps) {
+    const { habits } = useHabits()
+
     if (habits.length == 0) {
         return <p className="text-center text-zinc-500 py-12">
             No habits yet. Add one above to get started!
@@ -24,8 +20,7 @@ export function HabitList({
             <HabitItem
                 key={habit.id}
                 habit={habit}
-                deleteHabit={deleteHabit}
-                toggleHabit={toggleHabit}
+                visibleDates={visibleDates}
             />
         ))}
     </div>
@@ -33,19 +28,11 @@ export function HabitList({
 
 type HabitItemProps = {
     habit: Habit,
-    deleteHabit: (id: string) => void,
-    toggleHabit: (id: string, date: Date) => void
+    visibleDates: Date[]
 }
 
-function HabitItem({
-    habit,
-    deleteHabit,
-    toggleHabit
-}: HabitItemProps) {
-    const visibleDates = eachDayOfInterval({
-        start: startOfWeek(new Date(), { weekStartsOn: 1 }),
-        end: endOfWeek(new Date(), { weekStartsOn: 1 }),
-    })
+function HabitItem({ habit, visibleDates }: HabitItemProps) {
+    const { deleteHabit, toggleHabit } = useHabits()
     const streak = getStreak(habit.completions)
 
     return <div className="rounded-xl bg-zinc-800 p-4 flex flex-col gap-3">

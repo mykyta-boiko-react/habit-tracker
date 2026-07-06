@@ -1,5 +1,8 @@
 import type { ComponentProps } from "react"
 import { twMerge } from "tailwind-merge"
+// import CSS module
+import styles from './Button.module.css';
+
 
 type Variant = "primary" | "secondary" | "ghost-destructive"
 
@@ -14,6 +17,7 @@ export function Button({ variant = "primary", className, ...props }: ButtonProps
 			{...props}
 			// twMerge: merges multiple Tailwind class strings, while resolving conflicts properly
 			className={twMerge(
+				styles.button,
 				"transition-colors rounded px-2 py-1 disabled:opacity-30 disabled:cursor-not-allowed",
 				getVariantStyles(variant),
 				className

@@ -1,16 +1,14 @@
 import { useState, type SubmitEvent } from "react";
 import { Button } from "./Button";
+import { useHabits } from "../context/useHabits";
 
-type HabitFormProps = {
-    addHabit: (name: string) => void
-}
-
-export function HabitForm({ addHabit }: HabitFormProps) {
+export function HabitForm() {
     // adds a state variable to your component
     // state - the only thing that causes an application to rerender
     // [state, setState] = useState(initialValue)
     // every time name changes (via setName), React re-renders the HabitForm component
     const [name, setName] = useState('')
+    const { addHabit } = useHabits()
 
     const handleSubmit = (e: SubmitEvent) => {
         e.preventDefault()
